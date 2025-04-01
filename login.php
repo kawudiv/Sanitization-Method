@@ -3,13 +3,15 @@ include 'config.php';
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // ✅ Input Sanitization: htmlspecialchars() - Prevents XSS by encoding special characters
-    // ✅ Input Sanitization: trim() - Removes unnecessary spaces before/after the input
-    $uname = trim(htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8'));
-    $pass = trim($_POST['password']); // Passwords should not be sanitized with htmlspecialchars()
+    // Sanitization Methods:
+    // htmlspecialchars()
+    // trim() 
+    // filter_var() 
+    
+    $uname = trim(filter_var(htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8'), FILTER_SANITIZE_STRING));
+    $pass = trim($_POST['password']);
 
-    // ✅ SQL Injection Prevention: Prepared Statements using bind_param()
-    // This ensures user input is treated as data, not executable SQL code.
+    // Prepared Statements using bind_param()
     $sql = "SELECT id, password FROM users WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $uname);

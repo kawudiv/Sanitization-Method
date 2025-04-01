@@ -7,7 +7,12 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-$username = trim(htmlspecialchars($_SESSION['username'], ENT_QUOTES, 'UTF-8'));
+// Sanitization Methods:
+// htmlspecialchars() 
+// trim() 
+// filter_var() 
+
+$username = trim(filter_var(htmlspecialchars($_SESSION['username'], ENT_QUOTES, 'UTF-8'), FILTER_SANITIZE_STRING));
 
 $sql = "SELECT username FROM users WHERE username = ?";
 $stmt = $conn->prepare($sql);
